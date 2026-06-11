@@ -9,6 +9,21 @@ interface InputFormProps {
   isModal?: boolean;
 }
 
+interface Inspiration {
+  label: string;
+  destination: string;
+  duration: number;
+  partySize: string;
+  interests: string;
+}
+
+const INSPIRATIONS: Inspiration[] = [
+  { label: 'Kyoto · 5 days · temples & tea', destination: 'Kyoto', duration: 5, partySize: 'Couple', interests: 'Temples, tea houses, hidden gardens' },
+  { label: 'Lisbon · 4 days · food & fado', destination: 'Lisbon', duration: 4, partySize: 'Group of Friends', interests: 'Local food, fado music, viewpoints' },
+  { label: 'Iceland · 6 days · nature', destination: 'Reykjavik', duration: 6, partySize: 'Couple', interests: 'Waterfalls, hot springs, northern lights' },
+  { label: 'NYC · 3 days · with kids', destination: 'New York City', duration: 3, partySize: 'Family with Kids', interests: 'Museums, parks, kid-friendly food' },
+];
+
 export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isModal = false }) => {
   const [destination, setDestination] = useState('');
   const [duration, setDuration] = useState(3);
@@ -19,6 +34,13 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMod
     e.preventDefault();
     if (!destination) return;
     onSubmit({ destination, duration, partySize, interests });
+  };
+
+  const applyInspiration = (i: Inspiration) => {
+    setDestination(i.destination);
+    setDuration(i.duration);
+    setPartySize(i.partySize);
+    setInterests(i.interests);
   };
 
   const formContent = (
@@ -119,6 +141,23 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading, isMod
       <GlassCard className="p-8">
         {formContent}
       </GlassCard>
+
+      {/* Inspiration chips */}
+      <div className="mt-6 text-center">
+        <p className="text-xs uppercase tracking-widest text-slate-400 mb-3">Need inspiration?</p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {INSPIRATIONS.map((i) => (
+            <button
+              key={i.label}
+              type="button"
+              onClick={() => applyInspiration(i)}
+              className="px-4 py-2.5 rounded-full bg-white/60 border border-slate-200 text-sm text-slate-600 hover:border-rose-300 hover:text-rose-500 hover:bg-white shadow-sm transition-all"
+            >
+              {i.label}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
